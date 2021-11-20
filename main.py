@@ -6,10 +6,7 @@ from calculate_asset import calculate_asset
 ASSETS_URL = "https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-products?includeEtf=true"
 ASSET_CATEGORY = "BNB"
 def filter_asset(asset):
-    if asset['q'] == ASSET_CATEGORY:
-        return True
-    
-    return False
+    return asset['q'] == ASSET_CATEGORY
 
 def getAssets():
     res = requests.get(ASSETS_URL)
@@ -56,6 +53,7 @@ def calculate_ema(ema_20, ema_55, prev_ema_20, prev_ema_55):
 def main():
     while True:
         assets = getAssets()
+        print(len(assets))
         # todo remove [:1]
         for asset in assets[:1]:
             calculate_asset(asset)
