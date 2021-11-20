@@ -12,8 +12,8 @@ def getAssets():
     return list(filter(filter_asset, res.json()["data"]))
 
 def main():
+    assets = getAssets()
     while True:
-        assets = getAssets()
         # todo remove [:1]
         for asset in assets[:1]:
             calculate_asset(asset)
