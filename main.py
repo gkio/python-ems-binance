@@ -15,7 +15,7 @@ def getAssets():
     res = requests.get(ASSETS_URL)
     return list(filter(filter_asset, res.json()["data"]))
 
-COUNT_CANDLES = 100
+COUNT_CANDLES = 50
 INTERVAL = "5m"
 
 def get_asset_candles(ASSET):
@@ -56,6 +56,7 @@ def calculate_ema(ema_20, ema_55, prev_ema_20, prev_ema_55):
 def main():
     while True:
         assets = getAssets()
+        # todo remove [:1]
         for asset in assets[:1]:
             calculate_asset(asset)
 

@@ -35,6 +35,7 @@ def calculate_ema(ema_20, ema_55, state):
             # todo add logic to buy
             pass
     else:
+        print(state['prev_ema_20'])
         # todo add logic to sell
         pass
 
