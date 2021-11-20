@@ -5,7 +5,8 @@ ASSETS_URL = "https://www.binance.com/bapi/asset/v2/public/asset-service/product
 ASSET_CATEGORY = "BNB"
 
 def filter_asset(asset):
-    return asset['q'] == ASSET_CATEGORY
+    return asset['s'] == "ETHUSDT"
+    # return asset['q'] == ASSET_CATEGORY
 
 def getAssets():
     res = requests.get(ASSETS_URL)
@@ -14,8 +15,8 @@ def getAssets():
 def main():
     assets = getAssets()
     while True:
-        # todo remove [:1]
         for asset in assets[:1]:
+        # for asset in assets:
             calculate_asset(asset)
 
 if __name__ == '__main__':
