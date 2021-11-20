@@ -10,11 +10,14 @@ def get_asset_candles(ASSET):
     res = requests.get(url)
     return res.json()
 
-def create_ema(assetData):
-    ema_20 = talib.EMA(assetData, 20)
-    ema_55 = talib.EMA(assetData, 55)
+EMA_FROM=20
+EMA_TO=55
 
-    return ema_20, ema_55
+def create_ema(asset_data):
+    ema_from = talib.EMA(asset_data, EMA_FROM)
+    ema_to = talib.EMA(asset_data, EMA_TO)
+
+    return ema_from, ema_to
 
 
 def fetch_and_normalize(asset):
@@ -26,15 +29,16 @@ def fetch_and_normalize(asset):
     return np.array(data)
 
 def get_ema(data):
-    ema_20, ema_55 = create_ema(data)
-    return ema_20[-1], ema_55[-1]
+    ema_from, ema_to = create_ema(data)
+    return ema_from[-1], ema_to[-1]
 
-def calculate_ema(ema_20, ema_55, state):
-    if ema_20 > ema_55 and state['prev_ema_20']:
-        if state['prev_ema_20'] < state['prev_ema_55']:
+def calculate_ema(ema_from, ema_to, state):
+    if ema_from > ema_to and state['prev_ema_from']:
+        if state['prev_ema_from'] < state['prev_ema_to']:
             # todo add logic to buy
             pass
     else:
+        print(state['prev_ema_from'], state['prev_ema_to'])
         # todo add logic to sell
         pass
 
@@ -43,17 +47,17 @@ def calculate_ema(ema_20, ema_55, state):
 state = {
     'buy': False,
     'sell': True,
-    'prev_ema_20': None,
-    'prev_ema_55': None
+    'prev_ema_from': None,
+    'prev_ema_to': None
 }
 
 def calculate_asset(asset):
     data = fetch_and_normalize(asset['s'])
-    ema_20, ema_55 = get_ema(data)
+    ema_from, ema_to = get_ema(data)
     calculate_ema(
-        ema_20,
-        ema_55,
+        ema_from,
+        ema_to,
         state,
     )
-    state['prev_ema_20'] = ema_20
-    state['prev_ema_55'] = ema_55
+    state['prev_ema_from'] = ema_from
+    state['prev_ema_to'] = ema_to
